@@ -1,0 +1,46 @@
+services:
+  sui-gas-pool:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    configs:
+      - source: sui-gas-pool
+        target: /root/config.yml
+    depends_on:
+      redis:
+        condition: service_started
+      sui-localnet:
+        condition: service_healthy
+    environment:
+      - GAS_STATION_AUTH=123
+    ports:
+      - 9527:80
+
+  sui-localnet:
+    image: mysten/sui-tools:testnet-v1.45.2
+    healthcheck:
+      test: sui client chain-identifier
+      start_period: 10s
+      start_interval: 1s
+    environment:
+      - RUST_LOG=sui_node=info,sui_faucet=info
+    command: sui start --with-faucet
+    ports:
+      - 9000:9000 # JSON-RPC
+      - 9123:9123 # Faucet
+    volumes:
+      - sui-node:/root/.sui/sui_config
+
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/data
+
+configs:
+  sui-gas-pool:
+    file: ./configs/sui-gas-pool.yml
+
+volumes:
+  redis-data:
+  sui-checkpoints:
+  sui-node:

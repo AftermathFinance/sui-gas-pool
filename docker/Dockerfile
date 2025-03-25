@@ -16,6 +16,10 @@ FROM debian:bullseye-slim AS runtime
 RUN apt-get update && apt-get install -y libjemalloc-dev ca-certificates
 COPY --from=builder /target/release/sui-gas-station /usr/local/bin
 
+WORKDIR /root
+ENTRYPOINT [ "/usr/local/bin/sui-gas-station" ]
+CMD [ "--config-path", "./config.yml" ]
+
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL build-date=$BUILD_DATE

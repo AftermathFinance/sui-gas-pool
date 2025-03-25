@@ -1,0 +1,15 @@
+---
+signer-config:
+  local:
+    keypair: ADcYZ2BQM9Bl1ynLvygmCXpuTtF+Fq0wKHQ3GZVjZe0z
+rpc-host-ip: 0.0.0.0
+rpc-port: 80
+metrics-port: 9184
+gas-pool-config:
+  redis:
+    redis_url: "redis://redis"
+fullnode-url: "http://sui-localnet:9000" # In production, you'll likely use an RPC provider
+coin-init-config:
+  target-init-balance: 100000000
+  refresh-interval-sec: 10
+daily-gas-usage-cap: 1500000000000
